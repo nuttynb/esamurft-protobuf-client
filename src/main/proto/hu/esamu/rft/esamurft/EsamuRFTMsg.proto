@@ -4,11 +4,12 @@ option java_package = "hu.esamu.rft.esamurft.protos";
 option java_outer_classname = "EsamuRFTMessages";
 
 message item {
-  required string name = 1;
-  required string description = 2;
-  required int64 timestamp = 3;
-  required int32 longitude = 4;
-  required int32 latitude = 5;
-  required bytes image = 6;
+  required string id = 1;
+  required string name = 2;
+  required string description = 3;
+  required int64 timestamp = 4;
+  required int32 longitude = 5;
+  required int32 latitude = 6;
+  required bytes image = 7;
 }
 
