@@ -17,6 +17,15 @@
                 <role>Software Developer</role>
             </roles>
         </developer>
+        <developer>
+            <id>PistiZ</id>
+            <name>István Balogh</name>
+            <email>pistiz7@gmail.com</email>
+            <roles>
+                <role>Software Developer</role>
+            </roles>
+            <organization>Neuron Software Ltd.</organization>
+        </developer>
     </developers>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
