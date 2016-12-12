@@ -1,5 +1,7 @@
 package hu.esamu.rft.esamurft.api;
 
+import hu.esamu.rft.esamurft.api.exception.SendingException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +29,13 @@ public class EsamuClient {
         REGISTER, LOGIN
     }
 
-    public void send(SendType sendType) throws IOException {
+    public void send(SendType sendType) throws IOException, SendingException {
+        if (!StringUtils.isNoneBlank(username, password, facebookId, googleId)) {
+            throw new SendingException("All parameters are blank!");
+        }
+        // TODO csoportokba szedni őket
+        // TODO blank logika javítása
+
         // TODO ha semmit se állítunk be, dobjunk kivételt
         URL registerUrl = sendType.equals(SendType.REGISTER) ? new URL(REGISTER_URL) : new URL(LOGIN_URL);
         LOGGER.info(registerUrl.toString());

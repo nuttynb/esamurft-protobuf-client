@@ -2,6 +2,8 @@ package hu.esamu.rft.esamurft.app;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
+import hu.esamu.rft.esamurft.api.EsamuClient;
+import hu.esamu.rft.esamurft.api.exception.SendingException;
 import hu.esamu.rft.esamurft.protos.EsamuRFTMessages;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
@@ -36,7 +38,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-
+/*
         URL messageUrl = new URL(MESSAGE_URL);
         URL registerUrl = new URL(REGISTER_URL);
         Scanner scanner = new Scanner(System.in);
@@ -54,6 +56,18 @@ public class Main {
 
         for (int i = 0; i < numberOfMessages; i++) {
             sendMessage((HttpURLConnection) messageUrl.openConnection(), r.nextInt(numberOfUsers));
+        }*/
+
+        EsamuClient client = new EsamuClient();
+        client.setUsername("");
+        client.setPassword("");
+        client.setFacebookId("doxy");
+        try {
+            client.send(EsamuClient.SendType.REGISTER);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SendingException e) {
+            e.printStackTrace();
         }
     }
 
