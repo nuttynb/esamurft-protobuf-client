@@ -3,8 +3,7 @@ package hu.esamu.rft.esamurft.app;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
 import hu.esamu.rft.esamurft.api.EsamuClient;
-import hu.esamu.rft.esamurft.api.exception.SendingException;
-import hu.esamu.rft.esamurft.protos.EsamuRFTMessages;
+import hu.esamu.rft.esamurft.api.EsamuRFTMessages;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
@@ -15,7 +14,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class Main {
@@ -38,8 +36,8 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-/*
-        URL messageUrl = new URL(MESSAGE_URL);
+
+     /*   URL messageUrl = new URL(MESSAGE_URL);
         URL registerUrl = new URL(REGISTER_URL);
         Scanner scanner = new Scanner(System.in);
         System.out.println("Number of usernames: ");
@@ -57,18 +55,19 @@ public class Main {
         for (int i = 0; i < numberOfMessages; i++) {
             sendMessage((HttpURLConnection) messageUrl.openConnection(), r.nextInt(numberOfUsers));
         }*/
-
         EsamuClient client = new EsamuClient();
-        client.setUsername("");
-        client.setPassword("");
-        client.setFacebookId("doxy");
-        try {
-            client.send(EsamuClient.SendType.REGISTER);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SendingException e) {
-            e.printStackTrace();
-        }
+        client.setUsername("Soma");
+        client.setPassword("sonka");
+        client.send(EsamuClient.SendType.REGISTER);
+
+        client.setMessageDescription("Cuccos");
+        client.setMessageId("id");
+        client.setMessageLatitude(1);
+        client.setMessageLongitude(1);
+        client.setMessageImage(ByteString.EMPTY);
+        client.setMessageName("Soma");
+        client.sendMessage();
+
     }
 
     private static String registerUser(HttpURLConnection connection, String user) throws IOException {
