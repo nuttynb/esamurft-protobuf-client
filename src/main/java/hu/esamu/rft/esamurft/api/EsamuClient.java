@@ -16,16 +16,21 @@ public class EsamuClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EsamuClient.class);
 
+    private static final byte[] POST_PARAMETER_SEPARATOR = "&".getBytes(StandardCharsets.UTF_8);
+    private static final String EQUAL_SIGN = "=";
+
     private static final String REGISTER_URL = "http://localhost:8080/esamu/register";
     private static final String LOGIN_URL = "http://localhost:8080/esamu/login";
     private static final String MESSAGE_URL = "http://localhost:8080/esamu/message";
     private static final String USERNAME_KEY = "username";
     private static final String PASSWORD_KEY = "password";
+    private static final String FACEBOOK_ID_TOKEN = "facebookIdToken";
+    private static final String GOOGLE_ID_TOKEN = "googleIdToken";
 
     private String username;
     private String password;
-    private String facebookId;
-    private String googleId;
+    private String facebookIdToken;
+    private String googleIdToken;
 
     private EsamuRFTMessages.item.Builder message;
 
@@ -48,13 +53,19 @@ public class EsamuClient {
         connection.setRequestProperty("charset", "utf-8");
         connection.setDoOutput(true);
 
-        String usernameParam = USERNAME_KEY + "=" + username;
-        String passwordParam = PASSWORD_KEY + "=" + password;
+        String usernameParam = USERNAME_KEY + EQUAL_SIGN + username;
+        String passwordParam = PASSWORD_KEY + EQUAL_SIGN + password;
+        String fbTokenParam = FACEBOOK_ID_TOKEN + EQUAL_SIGN + facebookIdToken;
+        String googleTokenParam = GOOGLE_ID_TOKEN + EQUAL_SIGN + googleIdToken;
 
         try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
             wr.write(usernameParam.getBytes(StandardCharsets.UTF_8));
-            wr.write("&".getBytes(StandardCharsets.UTF_8));
+            wr.write(POST_PARAMETER_SEPARATOR);
             wr.write(passwordParam.getBytes(StandardCharsets.UTF_8));
+            wr.write(POST_PARAMETER_SEPARATOR);
+            wr.write(fbTokenParam.getBytes(StandardCharsets.UTF_8));
+            wr.write(POST_PARAMETER_SEPARATOR);
+            wr.write(googleTokenParam.getBytes(StandardCharsets.UTF_8));
         }
 
         int responseCode = connection.getResponseCode();
@@ -120,7 +131,7 @@ public class EsamuClient {
     }
 
     public void setMessageLongitude(int longitude) {
-        message.setLatitude(longitude);
+        message.setLongitude(longitude);
     }
 
     public ByteString getMessageImage() {
@@ -135,7 +146,6 @@ public class EsamuClient {
         ByteString bs = ByteString.copyFrom(image);
         message.setImage(bs);
     }
-
 
     public String getUsername() {
         return username;
@@ -153,19 +163,19 @@ public class EsamuClient {
         this.password = password;
     }
 
-    public String getFacebookId() {
-        return facebookId;
+    public String getFacebookIdToken() {
+        return facebookIdToken;
     }
 
-    public void setFacebookId(String facebookId) {
-        this.facebookId = facebookId;
+    public void setFacebookIdToken(String facebookIdToken) {
+        this.facebookIdToken = facebookIdToken;
     }
 
-    public String getGoogleId() {
-        return googleId;
+    public String getGoogleIdToken() {
+        return googleIdToken;
     }
 
-    public void setGoogleId(String googleId) {
-        this.googleId = googleId;
+    public void setGoogleIdToken(String googleIdToken) {
+        this.googleIdToken = googleIdToken;
     }
 }
