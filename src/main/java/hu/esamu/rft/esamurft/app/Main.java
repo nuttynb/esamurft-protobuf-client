@@ -60,6 +60,13 @@ public class Main {
         client.setPassword("sonka");
         client.send(EsamuClient.SendType.REGISTER);
 
+        // successful login
+        client.send(EsamuClient.SendType.LOGIN);
+
+        // unsuccessful login
+        client.setPassword("doxy");
+        client.send(EsamuClient.SendType.LOGIN);
+
         client.setMessageDescription("Cuccos");
         client.setMessageId("id");
         client.setMessageLatitude(1);

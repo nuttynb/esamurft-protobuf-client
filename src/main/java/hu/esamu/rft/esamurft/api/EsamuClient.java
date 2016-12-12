@@ -2,6 +2,8 @@ package hu.esamu.rft.esamurft.api;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,24 +14,26 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 
+import static hu.esamu.rft.esamurft.api.util.Constants.*;
+
 public class EsamuClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EsamuClient.class);
 
-    private static final byte[] POST_PARAMETER_SEPARATOR = "&".getBytes(StandardCharsets.UTF_8);
-    private static final String EQUAL_SIGN = "=";
-
-    private static final String REGISTER_URL = "http://localhost:8080/esamu/register";
-    private static final String LOGIN_URL = "http://localhost:8080/esamu/login";
-    private static final String MESSAGE_URL = "http://localhost:8080/esamu/message";
-    private static final String USERNAME_KEY = "username";
-    private static final String PASSWORD_KEY = "password";
-    private static final String FACEBOOK_ID_TOKEN = "facebookIdToken";
-    private static final String GOOGLE_ID_TOKEN = "googleIdToken";
-
+    @Getter
+    @Setter
     private String username;
+
+    @Getter
+    @Setter
     private String password;
+
+    @Getter
+    @Setter
     private String facebookIdToken;
+
+    @Getter
+    @Setter
     private String googleIdToken;
 
     private EsamuRFTMessages.item.Builder message;
@@ -48,7 +52,7 @@ public class EsamuClient {
         LOGGER.info(registerUrl.toString());
         HttpURLConnection connection = (HttpURLConnection) registerUrl.openConnection();
 
-        connection.setRequestMethod("POST");
+        connection.setRequestMethod(POST_METHOD_NAME);
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         connection.setRequestProperty("charset", "utf-8");
         connection.setDoOutput(true);
@@ -76,7 +80,7 @@ public class EsamuClient {
         URL messageUrl = new URL(MESSAGE_URL);
         HttpURLConnection connection = (HttpURLConnection) messageUrl.openConnection();
 
-        connection.setRequestMethod("POST");
+        connection.setRequestMethod(POST_METHOD_NAME);
         connection.setRequestProperty("Content-Type", "application/octet-stream");
         connection.setDoOutput(true);
 
@@ -91,6 +95,7 @@ public class EsamuClient {
 
         LOGGER.info("Sending 'POST' request to URL : " + MESSAGE_URL);
         int responseCode = connection.getResponseCode();
+        LOGGER.info("HTTP status code " + responseCode);
     }
 
     public String getMessageDescription() {
@@ -145,37 +150,5 @@ public class EsamuClient {
     public void setMessageImage(byte[] image) {
         ByteString bs = ByteString.copyFrom(image);
         message.setImage(bs);
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFacebookIdToken() {
-        return facebookIdToken;
-    }
-
-    public void setFacebookIdToken(String facebookIdToken) {
-        this.facebookIdToken = facebookIdToken;
-    }
-
-    public String getGoogleIdToken() {
-        return googleIdToken;
-    }
-
-    public void setGoogleIdToken(String googleIdToken) {
-        this.googleIdToken = googleIdToken;
     }
 }
