@@ -1,5 +1,7 @@
 package hu.esamu.rft.esamurft.api;
 
+import com.google.protobuf.ByteString;
+import com.google.protobuf.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +10,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 
 public class EsamuClient {
 
@@ -15,6 +18,7 @@ public class EsamuClient {
 
     private static final String REGISTER_URL = "http://localhost:8080/esamu/register";
     private static final String LOGIN_URL = "http://localhost:8080/esamu/login";
+    private static final String MESSAGE_URL = "http://localhost:8080/esamu/message";
     private static final String USERNAME_KEY = "username";
     private static final String PASSWORD_KEY = "password";
 
@@ -22,6 +26,12 @@ public class EsamuClient {
     private String password;
     private String facebookId;
     private String googleId;
+
+    private EsamuRFTMessages.item.Builder message;
+
+    public EsamuClient() {
+        message = EsamuRFTMessages.item.newBuilder();
+    }
 
     public enum SendType {
         REGISTER, LOGIN
@@ -50,6 +60,82 @@ public class EsamuClient {
         int responseCode = connection.getResponseCode();
         LOGGER.info("HTTP status code " + responseCode);
     }
+
+    public void sendMessage() throws IOException {
+        URL messageUrl = new URL(MESSAGE_URL);
+        HttpURLConnection connection = (HttpURLConnection) messageUrl.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/octet-stream");
+        connection.setDoOutput(true);
+
+        Instant time = Instant.now();
+        Timestamp timestamp = Timestamp.newBuilder().setSeconds(time.getEpochSecond())
+                .setNanos(time.getNano()).build();
+        message.setTimestamp(timestamp.getSeconds());
+
+        try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+            wr.write(message.build().toByteArray());
+        }
+
+        LOGGER.info("Sending 'POST' request to URL : " + MESSAGE_URL);
+        int responseCode = connection.getResponseCode();
+    }
+
+    public String getMessageDescription() {
+        return message.getDescription();
+    }
+
+    public String getMessageName() {
+        return message.getName();
+    }
+
+    public String getMessageId() {
+        return message.getId();
+    }
+
+    public void setMessageDescription(String description) {
+        message.setDescription(description);
+    }
+
+    public void setMessageName(String name) {
+        message.setName(name);
+    }
+
+    public void setMessageId(String id) {
+        message.setId(id);
+
+    }
+
+    public int getMessageLatitude() {
+        return message.getLatitude();
+    }
+
+    public int getMessageLongitude() {
+        return message.getLongitude();
+    }
+
+    public void setMessageLatitude(int latitude) {
+        message.setLatitude(latitude);
+    }
+
+    public void setMessageLongitude(int longitude) {
+        message.setLatitude(longitude);
+    }
+
+    public ByteString getMessageImage() {
+        return message.getImage();
+    }
+
+    public void setMessageImage(ByteString image) {
+        message.setImage(image);
+    }
+
+    public void setMessageImage(byte[] image) {
+        ByteString bs = ByteString.copyFrom(image);
+        message.setImage(bs);
+    }
+
 
     public String getUsername() {
         return username;

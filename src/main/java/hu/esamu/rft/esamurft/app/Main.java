@@ -2,7 +2,7 @@ package hu.esamu.rft.esamurft.app;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
-import hu.esamu.rft.esamurft.protos.EsamuRFTMessages;
+import hu.esamu.rft.esamurft.api.EsamuRFTMessages;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
@@ -13,7 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class Main {
